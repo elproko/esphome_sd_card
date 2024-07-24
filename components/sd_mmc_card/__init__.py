@@ -76,10 +76,15 @@ async def to_code(config):
 
     cg.add(var.set_mode_1bit(config[CONF_MODE_1BIT]))
 
-    if CORE.using_arduino:
-        if CORE.is_esp32:
+    if CORE.is_esp32:
+        if CORE.using_arduino:
             cg.add_library("FS", None)
             cg.add_library("SD_MMC", None)
+        elif CORE.using_esp_idf:
+            cg.add_define("SOC_SDMMC_USE_GPIO_MATRIX")
+        #     cg.add_library("esp_vfs_fat", None)
+        #     cg.add_library("driver/sdmmc_host", None)
+        #     cg.add_library("sdmmc_cmd", None)
 
 
 SD_MMC_PATH_ACTION_SCHEMA = cv.Schema(

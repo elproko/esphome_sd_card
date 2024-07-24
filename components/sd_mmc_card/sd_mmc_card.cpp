@@ -36,6 +36,8 @@ void SdMmc::dump_config() {
 #ifdef USE_TEXT_SENSOR
   LOG_TEXT_SENSOR("  ", "SD Card Type", this->sd_card_type_text_sensor_);
 #endif
+if (this->is_failed())
+  ESP_LOGE(TAG, this->init_error_.c_str());
 }
 
 size_t SdMmc::file_size(std::string const &path) { return this->file_size(path.c_str()); }

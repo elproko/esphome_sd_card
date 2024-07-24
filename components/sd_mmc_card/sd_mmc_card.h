@@ -10,6 +10,10 @@
 #include "esphome/components/text_sensor/text_sensor.h"
 #endif
 
+#ifdef USE_ESP_IDF
+#include "sdmmc_cmd.h"
+#endif
+
 namespace esphome {
 namespace sd_mmc_card {
 
@@ -65,12 +69,21 @@ class SdMmc : public Component {
   GPIOPin *data2_pin_;
   GPIOPin *data3_pin_;
   bool mode_1bit_{false};
+  std::string init_error_;
 
+#ifdef USE_ESP_IDF
+  sdmmc_card_t *card_;
+#endif
 #ifdef USE_SENSOR
   std::vector<FileSizeSensor> file_size_sensors_{};
 #endif
   void update_sensors();
+#ifdef USE_ESP32_FRAMEWORK_ARDUINO
   std::string sd_card_type_to_string(int) const;
+#endif
+#ifdef USE_ESP_IDF
+  std::string sd_card_type() const;
+#endif
   std::vector<std::string> &list_directory_rec(const char *path, uint8_t depth, std::vector<std::string> &list);
 };
 

@@ -50,9 +50,6 @@ void Esp32CameraSDCardComponent::setup() {
       this->init_error_ = "Failed to mount filesystem.";
     } else {
       this->init_error_ =  "Failed to initialize the card.";
-#ifdef CONFIG_EXAMPLE_DEBUG_PIN_CONNECTIONS
-      check_sd_card_pins(&config, pin_count);
-#endif
     }
     ESP_LOGE(TAG, this->init_error_.c_str());
 

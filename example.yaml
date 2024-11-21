@@ -133,3 +133,4 @@ text_sensor:
 
 sd_file_server:
   id: file_server
+  port: 81

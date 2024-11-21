@@ -5,7 +5,7 @@
 namespace esphome {
 namespace sd_file_server {
 
-class SDFileServer: public AsyncWebHandler, public Component {
+class SDFileServer: public Component, public AsyncWebHandler {
 public:
     SDFileServer(web_server_base::WebServerBase *);
     void setup() override;

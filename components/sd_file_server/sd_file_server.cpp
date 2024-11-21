@@ -25,9 +25,9 @@ void SDFileServer::start() {
 }
 
 void SDFileServer::handleRequest(AsyncWebServerRequest *req) {
-  if (req->url() == "/") {
+  if (req->url() == "/test") {
     auto *response = req->beginResponse(200, "text/plain", "Hello World!");
-    response->addHeader("Content-Encoding", "gzip");
+    // response->addHeader("Content-Encoding", "gzip");
     req->send(response);
     return;
   }

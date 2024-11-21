@@ -26,14 +26,11 @@ CONFIG_SCHEMA = cv.All(
     ).extend(cv.COMPONENT_SCHEMA),
 )
 
-
-@coroutine_with_priority(64.0)
 async def to_code(config):
     paren = await cg.get_variable(config[CONF_WEB_SERVER_BASE_ID])
     
     var = cg.new_Pvariable(config[CONF_ID], paren)
     await cg.register_component(var, config)
     
-    cg.add(paren.set_port(config[CONF_PORT]))
     cg.add_define("USE_SD_CARD_WEBSERVER")
     cg.add_define("USE_SD_CARD_WEBSERVER_PORT", config[CONF_PORT])

@@ -11,6 +11,7 @@ namespace esphome {
 namespace sd_mmc_card {
 
 static const char *TAG = "smccea";
+static bool setup_done = false;
 
 void SdMmc::setup() {
   
@@ -60,11 +61,14 @@ void SdMmc::setup() {
   }  
 
   update_sensors();
+  setup_done = true;
 }
 
 void SdMmc::write_file(const char *path, const uint8_t *buffer, size_t len) {
   ESP_LOGD(TAG, "Writing file: %s\n", path);
 
+  if !setup_done this->setup();
+    
   File file = SD_MMC.open(path, FILE_WRITE);
   if (!file) {
     ESP_LOGE(TAG, "Failed to open file for writing");
@@ -121,6 +125,7 @@ bool SdMmc::delete_file(const char *path) {
 
 std::vector<std::string> SdMmc::list_directory(const char *path, uint8_t depth) {
   std::vector<std::string> list;
+  ESP_LOGD(TAG, "Listing directory: %s\n", path);  
   list_directory_rec(path, depth, list);
   return list;
 }

@@ -24,14 +24,14 @@ void SdMmc::setup() {
     ESP_LOGE(TAG, "Failed to set pins");
     mark_failed();
     return;
-  } else ESP_LOGD(TAG, "Setup pins done");
+  } else ESP_LOGE(TAG, "Setup pins done");
 
   bool beginResult = this->mode_1bit_ ? SD_MMC.begin("/sdcard", this->mode_1bit_) : SD_MMC.begin();
   if (!beginResult) {
     ESP_LOGE(TAG, "Card Mount Failed");
     mark_failed();
     return;
-  } else ESP_LOGD(TAG, "Card Mount done");
+  } else ESP_LOGE(TAG, "Card Mount done");
 
   uint8_t cardType = SD_MMC.cardType();
 
@@ -44,7 +44,7 @@ void SdMmc::setup() {
     ESP_LOGE(TAG, "No SD_MMC card attached");
     mark_failed();
     return;
-  } else ESP_LOGD(TAG, "Card Type: %s",sd_card_type_to_string(cardType));
+  } else ESP_LOGE(TAG, "Card Type: %s",sd_card_type_to_string(cardType));
 
   update_sensors();
 }

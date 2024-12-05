@@ -46,7 +46,7 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Optional(CONF_DATA0_PIN, default="GPIO2"): pins.gpio_pin_schema({CONF_OUTPUT: True, CONF_INPUT: True}),
         cv.Optional(CONF_DATA1_PIN, default="GPIO20"): pins.gpio_pin_schema({CONF_OUTPUT: True, CONF_INPUT: True}),
         cv.Optional(CONF_DATA2_PIN, default="GPIO27"): pins.gpio_pin_schema({CONF_OUTPUT: True, CONF_INPUT: True}),
-        cv.Optional(CONF_DATA3_PIN, default="GPIO5"): pins.gpio_pin_schema({CONF_OUTPUT: True, CONF_INPUT: True}),
+        cv.Optional(CONF_DATA3_PIN, default="GPIO29"): pins.gpio_pin_schema({CONF_OUTPUT: True, CONF_INPUT: True}),
         cv.Optional(CONF_MODE_1BIT, default=False): cv.boolean,
     }
 ).extend(cv.COMPONENT_SCHEMA)

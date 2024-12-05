@@ -67,7 +67,7 @@ void SdMmc::setup() {
 void SdMmc::write_file(const char *path, const uint8_t *buffer, size_t len) {
   ESP_LOGD(TAG, "Writing file: %s\n", path);
 
-  if !setup_done this->setup();
+  if !(setup_done) this->setup();
     
   File file = SD_MMC.open(path, FILE_WRITE);
   if (!file) {
@@ -83,6 +83,8 @@ void SdMmc::write_file(const char *path, const uint8_t *buffer, size_t len) {
 void SdMmc::append_file(const char *path, const uint8_t *buffer, size_t len) {
   ESP_LOGD(TAG, "Appending to file: %s", path);
 
+    if !(setup_done) this->setup();
+
   File file = SD_MMC.open(path, FILE_APPEND);
   if (!file) {
     ESP_LOGE(TAG, "Failed to open file for appending");
@@ -95,6 +97,9 @@ void SdMmc::append_file(const char *path, const uint8_t *buffer, size_t len) {
 
 bool SdMmc::create_directory(const char *path) {
   ESP_LOGD(TAG, "Create directory: %s", path);
+
+    if !(setup_done) this->setup();
+
   if (!SD_MMC.mkdir(path)) {
     ESP_LOGE(TAG, "Failed to create directory");
     return false;
@@ -105,6 +110,9 @@ bool SdMmc::create_directory(const char *path) {
 
 bool SdMmc::remove_directory(const char *path) {
   ESP_LOGD(TAG, "Remove directory: %s", path);
+
+    if !(setup_done) this->setup();
+
   if (!SD_MMC.rmdir(path)) {
     ESP_LOGE(TAG, "Failed to remove directory");
     return false;
@@ -115,6 +123,9 @@ bool SdMmc::remove_directory(const char *path) {
 
 bool SdMmc::delete_file(const char *path) {
   ESP_LOGD(TAG, "Delete File: %s", path);
+
+  if !(setup_done) this->setup();
+
   if (!SD_MMC.remove(path)) {
     ESP_LOGE(TAG, "failed to remove file");
     return false;
@@ -126,6 +137,9 @@ bool SdMmc::delete_file(const char *path) {
 std::vector<std::string> SdMmc::list_directory(const char *path, uint8_t depth) {
   std::vector<std::string> list;
   ESP_LOGD(TAG, "Listing directory: %s\n", path);  
+
+  if !(setup_done) this->setup();
+
   list_directory_rec(path, depth, list);
   return list;
 }
@@ -133,6 +147,8 @@ std::vector<std::string> SdMmc::list_directory(const char *path, uint8_t depth) 
 std::vector<std::string> &SdMmc::list_directory_rec(const char *path, uint8_t depth,
                                                                          std::vector<std::string> &list) {
   ESP_LOGD(TAG, "Listing directory: %s\n", path);
+
+  if !(setup_done) this->setup();
 
   File root = SD_MMC.open(path);
   if (!root) {

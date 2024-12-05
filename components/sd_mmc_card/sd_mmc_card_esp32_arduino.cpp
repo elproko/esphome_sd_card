@@ -10,9 +10,12 @@
 namespace esphome {
 namespace sd_mmc_card {
 
-static const char *TAG = "sd_mmc_card_esp32_arduino";
+static const char *TAG = "smccea";
 
 void SdMmc::setup() {
+  
+  ESP_LOGD(TAG, "Setup pins...");
+  
   bool setPinResult =
       this->mode_1bit_ ? SD_MMC.setPins(Utility::get_pin_no(this->clk_pin_), Utility::get_pin_no(this->cmd_pin_),
                                         Utility::get_pin_no(this->data0_pin_))
@@ -24,14 +27,22 @@ void SdMmc::setup() {
     ESP_LOGE(TAG, "Failed to set pins");
     mark_failed();
     return;
-  } else ESP_LOGE(TAG, "Setup pins done");
+  } else {
+    ESP_LOGD(TAG, "Setup pins done");
+  }  
+
+  ESP_LOGD(TAG, "Start CD_MMC...");
 
   bool beginResult = this->mode_1bit_ ? SD_MMC.begin("/sdcard", this->mode_1bit_) : SD_MMC.begin();
   if (!beginResult) {
     ESP_LOGE(TAG, "Card Mount Failed");
     mark_failed();
     return;
-  } else ESP_LOGE(TAG, "Card Mount done");
+  } else {
+    ESP_LOGD(TAG, "Card Mount done");
+  }  
+
+    ESP_LOGD(TAG, "Get Card Type...");
 
   uint8_t cardType = SD_MMC.cardType();
 
@@ -44,13 +55,15 @@ void SdMmc::setup() {
     ESP_LOGE(TAG, "No SD_MMC card attached");
     mark_failed();
     return;
-  } else ESP_LOGE(TAG, "Card Type: %s",sd_card_type_to_string(cardType));
+  } else {
+    ESP_LOGD(TAG, "Card Type: %s",sd_card_type_to_string(cardType));
+  }  
 
   update_sensors();
 }
 
 void SdMmc::write_file(const char *path, const uint8_t *buffer, size_t len) {
-  ESP_LOGV(TAG, "Writing file: %s\n", path);
+  ESP_LOGD(TAG, "Writing file: %s\n", path);
 
   File file = SD_MMC.open(path, FILE_WRITE);
   if (!file) {
@@ -64,7 +77,7 @@ void SdMmc::write_file(const char *path, const uint8_t *buffer, size_t len) {
 }
 
 void SdMmc::append_file(const char *path, const uint8_t *buffer, size_t len) {
-  ESP_LOGV(TAG, "Appending to file: %s", path);
+  ESP_LOGD(TAG, "Appending to file: %s", path);
 
   File file = SD_MMC.open(path, FILE_APPEND);
   if (!file) {
@@ -77,7 +90,7 @@ void SdMmc::append_file(const char *path, const uint8_t *buffer, size_t len) {
 }
 
 bool SdMmc::create_directory(const char *path) {
-  ESP_LOGV(TAG, "Create directory: %s", path);
+  ESP_LOGD(TAG, "Create directory: %s", path);
   if (!SD_MMC.mkdir(path)) {
     ESP_LOGE(TAG, "Failed to create directory");
     return false;
@@ -87,7 +100,7 @@ bool SdMmc::create_directory(const char *path) {
 }
 
 bool SdMmc::remove_directory(const char *path) {
-  ESP_LOGV(TAG, "Remove directory: %s", path);
+  ESP_LOGD(TAG, "Remove directory: %s", path);
   if (!SD_MMC.rmdir(path)) {
     ESP_LOGE(TAG, "Failed to remove directory");
     return false;
@@ -97,7 +110,7 @@ bool SdMmc::remove_directory(const char *path) {
 }
 
 bool SdMmc::delete_file(const char *path) {
-  ESP_LOGV(TAG, "Delete File: %s", path);
+  ESP_LOGD(TAG, "Delete File: %s", path);
   if (!SD_MMC.remove(path)) {
     ESP_LOGE(TAG, "failed to remove file");
     return false;
@@ -114,7 +127,7 @@ std::vector<std::string> SdMmc::list_directory(const char *path, uint8_t depth) 
 
 std::vector<std::string> &SdMmc::list_directory_rec(const char *path, uint8_t depth,
                                                                          std::vector<std::string> &list) {
-  ESP_LOGV(TAG, "Listing directory: %s\n", path);
+  ESP_LOGD(TAG, "Listing directory: %s\n", path);
 
   File root = SD_MMC.open(path);
   if (!root) {

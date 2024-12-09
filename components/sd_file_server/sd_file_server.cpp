@@ -10,7 +10,12 @@ static const char *TAG = "sd_file_server";
 SDFileServer::SDFileServer(web_server_base::WebServerBase * base) : base_(base) {}
 
 void SDFileServer::setup() {
-    this->base_->add_handler(this);
+    //this->base_->add_handler(this);
+    this->base_->get_server()->on("/test", HTTP_GET, [](AsyncWebServerRequest *request){
+                    ESP_LOGI(TAG, "Sending the image");
+                    auto *response = request->beginResponse(200, "text/plain", "Hello World!");
+                    request->send(response);
+                });
 }
 
 void SDFileServer::dump_config() {
@@ -27,7 +32,6 @@ void SDFileServer::handleRequest(AsyncWebServerRequest *req) {
   ESP_LOGD(TAG, req->url().c_str());
   if (req->url() == "/test") {
     auto *response = req->beginResponse(200, "text/plain", "Hello World!");
-    response->addHeader("Contentgtg-Encoding", "gzip");
     req->send(response);
     return;
   }

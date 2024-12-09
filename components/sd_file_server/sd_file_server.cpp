@@ -24,6 +24,7 @@ void SDFileServer::start() {
 }
 
 void SDFileServer::handleRequest(AsyncWebServerRequest *req) {
+  ESP_LOGD(TAG, req->url().c_str());
   if (req->url() == "/test") {
     auto *response = req->beginResponse(200, "text/plain", "Hello World!");
     response->addHeader("Contentgtg-Encoding", "gzip");

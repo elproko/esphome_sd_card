@@ -10,7 +10,7 @@ static const char *TAG = "sd_file_server";
 SDFileServer::SDFileServer(web_server_base::WebServerBase * base) : base_(base) {}
 
 void SDFileServer::setup() {
-  this->base_->init();
+    this->base_->add_handler(this);
 }
 
 void SDFileServer::dump_config() {
@@ -19,7 +19,6 @@ void SDFileServer::dump_config() {
 }
 
 void SDFileServer::start() {
-    this->base_->init();
     this->base_->add_handler(this);
     this->initialized_ = true;
 }
@@ -27,7 +26,7 @@ void SDFileServer::start() {
 void SDFileServer::handleRequest(AsyncWebServerRequest *req) {
   if (req->url() == "/test") {
     auto *response = req->beginResponse(200, "text/plain", "Hello World!");
-    // response->addHeader("Contentgtg-Encoding", "gzip");
+    response->addHeader("Contentgtg-Encoding", "gzip");
     req->send(response);
     return;
   }
